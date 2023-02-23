@@ -1,10 +1,10 @@
 package com.example.tictactoebd
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.View.OnClickListener
+import android.view.View.VISIBLE
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -29,26 +29,24 @@ class GameActivity : AppCompatActivity(), OnClickListener {
 
     lateinit var restartbtn : Button
 
+    var bosilgan = 0
 
-    //var player1name = intent.getStringExtra(Intent.EXTRA_TEXT)
-    var player2name = "hg"
-
-
-    var players : ArrayList<Players> = arrayListOf(Players("player1name",0),
-        Players(player2name,0))
-
+    var players : ArrayList<Players> = arrayListOf(Players("",0),
+        Players("",0))
 
     var matrix = Array(3) { IntArray(3) { -1 } }
-
-
     var xGalimi = true
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
         setUI()
 
+        var player1name = intent.getStringExtra("NAME1")
+        var player2name = intent.getStringExtra("NAME2")
+
+        players[0].name = player1name.toString()
+        players[1].name = player2name.toString()
 
 
         player1.text = players[0].name
@@ -57,7 +55,7 @@ class GameActivity : AppCompatActivity(), OnClickListener {
         player1Score.text = players[0].score.toString()
         player2Score.text = players[1].score.toString()
 
-        textPlayer.text = "X"
+        textPlayer.text = players[0].name
 
         // x=0
         // o=1
@@ -89,16 +87,29 @@ class GameActivity : AppCompatActivity(), OnClickListener {
                 img.setImageResource(R.drawable.x)
                 xGalimi = false
                 matrix[col][row] = 0
-                textPlayer.text = "O"
+                textPlayer.text = players[1].name
+                bosilgan++
                 isWinner(0)
+                isDraw()
 
             }else{
                 img.setImageResource(R.drawable.o)
                 xGalimi = true
                 matrix[col][row] = 1
-                textPlayer.text = "X"
+                textPlayer.text = players[0].name
+                bosilgan++
                 isWinner(1)
+                isDraw()
             }
+
+        }
+    }
+
+    fun isDraw(){
+        if (bosilgan==9){
+            restartbtn.visibility = VISIBLE
+            textPlayer.text = "Draw"
+
         }
     }
 
@@ -164,6 +175,7 @@ class GameActivity : AppCompatActivity(), OnClickListener {
     }
 
     fun finishGame(a:Int){
+
         img0.isEnabled = false
         img1.isEnabled = false
         img2.isEnabled = false
@@ -180,6 +192,8 @@ class GameActivity : AppCompatActivity(), OnClickListener {
 
         player1Score.text = players[0].score.toString()
         player2Score.text = players[1].score.toString()
+
+        bosilgan=0
     }
 
 
@@ -188,8 +202,10 @@ class GameActivity : AppCompatActivity(), OnClickListener {
         matrix = Array(3) { IntArray(3) { -1 } }
         xGalimi = true
 
-        textPlayer.text = "Player X"
+        textPlayer.text = players[0].name
         restartbtn.visibility = View.INVISIBLE
+
+        bosilgan = 0
 
         img0.setImageDrawable(null)
         img1.setImageDrawable(null)
@@ -233,6 +249,4 @@ class GameActivity : AppCompatActivity(), OnClickListener {
         restartbtn = findViewById(R.id.restart)
 
     }
-
-
 }

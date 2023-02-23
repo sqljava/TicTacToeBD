@@ -25,16 +25,14 @@ class MainActivity : AppCompatActivity() {
             var player1name = player1.text.toString()
             var player2name = player2.text.toString()
 
+            val startGame = Intent(this, GameActivity::class.java).also {
+                it.putExtra("NAME1",player1name)
+                it.putExtra("NAME2", player2name)
+                startActivity(it)
+            }
 
 
-            //var players: ArrayList<Players> = arrayListOf(Players(player1name,0),Players(player2name,0))
 
-            val startGame = Intent(this, GameActivity::class.java)
-
-            startGame.putExtra(Intent.EXTRA_TEXT,player1name)
-//            startGame.putExtra("oyinchi1",player2name)
-
-            startActivity(startGame)
         }
     }
 }
